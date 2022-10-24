@@ -1,0 +1,8 @@
+a ampreensao nem sempre é opcao.
+atribuicao de prioridade as tarefas dependedo do algoritmo
+
+->earliest due date: o que tem a deadline mais proxima tem prioridade
+
+->earliest deadline first:
+
+->branch and bound: oferece multiplas solucoes

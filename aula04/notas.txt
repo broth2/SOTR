@@ -1,0 +1,35 @@
+criterio de Liu&Layland diz que nao basta ser menor que 100%, porque poder ser menor e nao cumprir deadlines a mesma, tem de ser menor ou igual
+
+os criterios se derem positivos(abaixo de 69%), entao é escalonavem mas se der negativo nao sabemos, pode ser ou nao.
+
+Liu&Layland (least upper bound) test diz que abaixo de 69% utilizacao é escalonavel, se for maior que 100% nao é escalonavel, se for entre, entao pode ser ou nao, temos de ver se esta abaixo do boud para x numero de tarefas: se tiver é escalonavel, se estiver entre o bound para esse numero de tarefas e 100%, entao é inconclusivo
+
+se os periodos forem harmonicos o bound é 100% para qualquer numero de tarefas
+ 
+Liu&Layland e Bini&Buttazzo&Buttazzo’ so funciona para rate monotonic(tarefa com a deadline menor tem a prioridade maior)
+
+rwc->response worst case
+wcrt->worst case response time
+
+o wcrt da tarefa mais importante é o seu tempo de execucao
+o wcrt geral nao pode ser o tempo
+
+wcrt(0)=(wcrt0/t1)*c1 + c2
+wcrt(1)=(wcrt0/t1)*c1 + wcrt(0)
+se o wcrt for maior que a deadline, podemos parar de calcular
+se houver dois resultados iguais, convergiu e encontramos a solucao
+
+as formulas sao inuteis para tarefas nao independentes e para nao preencao
+
+em tarefas de prioridade fixa, cada tarefa tem x prioridade e é imutavel
+
+--------------------------------------------------------------------------------------------------------------
+
+em xenomai as tarefas sao criadas e tem de ser iniciadas
+
+as tarefas em codigo, tem a parte inicial para definir memoria e variaveis e depois tem o ciclo infinito.
+é preciso um sinal para a tarefa iniciar, para a tarefa ser periodica usa se rt_task_set_periodic()
+definimos o id de tarefa, a hora de inicio, o periodo
+tarefas periodicas precisam de um sinal para dizer que a tarefa acabou rt_task_wait_period()
+
+um ficheiro especial analisa o sistema e cria o comando de compilacao perfeito para o nosso pc, que define as compilation flags e as lint flags

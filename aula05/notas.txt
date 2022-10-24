@@ -1,0 +1,22 @@
+escalonamento com prioridades dinamicas:
+-tipicamente usa se earliest deadline first
+-as tarefas nao estao ordenadas na ready queue
+-criterios de prioridade so se sabem em run time
+-em EDF, desde que o calculo nao diga que vamos usar 100% de CPU entao consigo cumprir deadlines
+-d=t -> deadline monotonic(acho) -> se a utilizacao for menos que 100% entao da para cumprir deadlines
+-d<t -> rate monotonic(acho) -> se a utilizacao for menos que 100% nao podemos garantir deadlines
+
+EARLIEST DEADLINE FIRST:
+-release sincrono nao é relevante para edf
+-numa situacao de empate, em edf, tanto faz qual escolhemos. Mas, se uma ja estiver ativa, continua a ser processada essa que esta ativa
+-em edf, jitter é tempo parado depois da ativacao
+-em edf, The worst-case response time does not coincide necessarily with the synchronous release
+
+LEAST SLACK FIRST:
+-a tarefa a execucao tem slack constante
+-as outras tarefas tem um slack a diminuir
+-sem regras adicionais, a medida que o slack de duas tarefas  se aproximasse, duas tarefas iam fazer n trocas durante runtime
+-o slack é calculado inicialmente e prioridades atribuidas
+-so se altera o slack numa ativacao de nova tarefa ou quando uma tarefa termina
+
+-laxity/ é o tempo ate a deadline que nao esta ocupado

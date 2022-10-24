@@ -1,0 +1,31 @@
+Maximum response time - 
+Diagramas
+1º Desenhas uma linha para cada tarefa, e preencher conforme os dados
+2º Ativação-seta para cima
+   Deadline-seta para baixo
+   
+  Para event triggered- meter as tarefas todas ao mesmo tempo(instante crítico)
+   
+   
+ Offset = tempo de inicio do sistema
+C - Worst Case Execution time- tempo da tarefa
+Ti - Período da tarefa
+D - Deadline -  quando a tarefa tem de estar acabada
+
+Utilização do CPU-
+TIme Triggered = Somatório de i até N - (numero de tarefas) do Worst Case Execution TIme/Período
+WCRT(time triggered) - diferença entre o release e o finish time
+
+Event Triggered - usar período médio
+
+Instante crítico- ativação das tarefas todas ao mesmo tempo
+WCRT(Event Triggered) - depende da tarefa
+ex da aula  
+1 e1
+2 e2
+3 e3
+
+Na taxa maxima do event triggered -  a utilizacao do cpu é 100%
+
+Event triggered > Time triggered - Utilizaçao do CPU
+Event Triggered < Time Triggered - Worst Case Response Time
