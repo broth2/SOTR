@@ -105,7 +105,7 @@ void task_code(void *args) {
 		//GET newTA
 		//new_ta-time1=tempo entre tarefas
 		//if (min||max)==empty : (min&&max)==tempo
-		//if tempo<min || tempo>max : min/max.update()
+		//if tempo<min || tempo>max :  min/max.update()
 		err=rt_task_wait_period(&overruns);
 		ta=rt_timer_read();
 		printf("\nthis is TA: %llu\n\n", ta/1000000000);
