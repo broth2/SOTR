@@ -106,10 +106,6 @@ void task_code(void *args) {
 	/* Set task as periodic */
 	err=rt_task_set_periodic(NULL, TM_NOW, taskArgs->taskPeriod_ns);
 	for(;;) {
-		//GET newTA
-		//new_ta-time1=tempo entre tarefas
-		//if (min||max)==empty : (min&&max)==tempo
-		//if tempo<min || tempo>max : min/max.update()
 		err=rt_task_wait_period(&overruns);
 		ta=rt_timer_read();
 		
@@ -147,8 +143,6 @@ void task_code(void *args) {
 
 		/* Task "load" */
 		Heavy_Work();
-		//t1 = rt_timer_read();
-		//get time1git@github.com:broth2/SOTR.git
 		
 	}
 	return;
