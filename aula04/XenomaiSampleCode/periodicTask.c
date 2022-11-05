@@ -98,7 +98,11 @@ void task_code(void *args) {
 	rt_task_inquire(curtask,&curtaskinfo);
 	taskArgs=(struct taskArgsStruct *)args;
 	printf("Task %s init, period:%llu\n", curtaskinfo.name, taskArgs->taskPeriod_ns);
-		
+	
+	int ta_prev, iat_min, iat_max;
+	int first_flag = 1;
+	int update_flag = 0;
+
 	/* Set task as periodic */
 	err=rt_task_set_periodic(NULL, TM_NOW, taskArgs->taskPeriod_ns);
 	for(;;) {
@@ -108,16 +112,43 @@ void task_code(void *args) {
 		//if tempo<min || tempo>max : min/max.update()
 		err=rt_task_wait_period(&overruns);
 		ta=rt_timer_read();
-		printf("\nthis is TA: %llu\n\n", ta/1000000000);
+		
+		int iat_curr;
+		if(ta_prev){
+			iat_curr=ta-ta_prev;
+			if(first_flag){
+				iat_max = iat_curr;
+				iat_min = iat_curr;
+				first_flag=0;
+			}else{
+				if(iat_curr>iat_max){
+					iat_max=iat_curr;
+					update_flag = 1;
+				}
+				if(iat_curr<iat_min){
+					iat_min=iat_curr;
+					update_flag=1;
+				}
+			}
+		}
+		
+
 		if(err) {
 			printf("task %s overrun!!!\n", curtaskinfo.name);
 			break;
 		}
 		printf("Task %s activation at time %llu\n", curtaskinfo.name,ta);
-		
+
+		ta_prev = ta;
+		if(update_flag){
+			printf("Task %s inter-arrival time(us): min: %.3f / max: %.3f\n", curtaskinfo.name, (float)iat_min/1000, (float)iat_max/1000);
+			update_flag = 0;
+		}
+
 		/* Task "load" */
 		Heavy_Work();
-		//get time1
+		//t1 = rt_timer_read();
+		//get time1git@github.com:broth2/SOTR.git
 		
 	}
 	return;
