@@ -36,8 +36,15 @@
 
 #define TASK_A_PRIO 25 	// RT priority [0..99]
 #define TASK_A_PERIOD_NS MS_2_NS(1000)
+#define TASK_B_PERIOD_NS MS_2_NS(847)
+
+#define TASK_B_PRIO 60 	// RT priority [0..99]
+
+#define TASK_C_PRIO 12 	// RT priority [0..99]
 
 RT_TASK task_a_desc; // Task decriptor
+RT_TASK task_b_desc; // Task decriptor
+RT_TASK task_c_desc; // Task decriptor
 
 
 /* *********************
@@ -53,28 +60,66 @@ void task_code(void *args); 	/* Task body */
 * Main function
 * *******************/ 
 int main(int argc, char *argv[]) {
-	int err; 
-	struct taskArgsStruct taskAArgs;
+	int err1, err2, err3, err4, err5, err6; 
+	struct taskArgsStruct taskAArgs, taskBArgs, taskCArgs;
 	
 	/* Lock memory to prevent paging */
 	mlockall(MCL_CURRENT|MCL_FUTURE); 
 
 	/* Create RT task */
 	/* Args: descriptor, name, stack size, priority [0..99] and mode (flags for CPU, FPU, joinable ...) */
-	err=rt_task_create(&task_a_desc, "Task a", TASK_STKSZ, TASK_A_PRIO, TASK_MODE);
-	if(err) {
-		printf("Error creating task a (error code = %d)\n",err);
-		return err;
+	err1=rt_task_create(&task_a_desc, "Task a", TASK_STKSZ, TASK_A_PRIO, TASK_MODE);
+	err2=rt_task_create(&task_b_desc, "Task b", TASK_STKSZ, TASK_B_PRIO, TASK_MODE);
+	err3=rt_task_create(&task_c_desc, "Task c", TASK_STKSZ, TASK_C_PRIO, TASK_MODE);
+
+
+	cpu_set_t c_cpu;
+	CPU_SET(0, &c_cpu);
+	err4 = rt_task_set_affinity(&task_a_desc, &c_cpu);
+	err5 = rt_task_set_affinity(&task_b_desc, &c_cpu);
+	err6 = rt_task_set_affinity(&task_c_desc, &c_cpu);
+
+	if(err1) {
+		printf("Error creating task a (error code = %d)\n",err1);
+		return err1;
 	} else 
 		printf("Task a created successfully\n");
+	if(err2) {
+		printf("Error creating task b (error code = %d)\n",err2);
+		return err2;
+	} else 
+		printf("Task b created successfully\n");
+	if(err3) {
+		printf("Error creating task c (error code = %d)\n",err3);
+		return err3;
+	} else 
+		printf("Task c created successfully\n");
+
+
+	if(err4) {
+		printf("Error binding task a (error code = %d)\n",err4);
+		return err4;
+	} 
+	if(err5) {
+		printf("Error creating task b (error code = %d)\n",err5);
+		return err5;
+	} 
+	if(err6) {
+		printf("Error creating task c (error code = %d)\n",err6);
+		return err6;
+	}
 	
 			
 	/* Start RT task */
 	/* Args: task decriptor, address of function/implementation and argument*/
-	taskAArgs.taskPeriod_ns = TASK_A_PERIOD_NS; 	
+	taskAArgs.taskPeriod_ns = TASK_A_PERIOD_NS;
+	taskBArgs.taskPeriod_ns = TASK_B_PERIOD_NS;
+	taskCArgs.taskPeriod_ns = TASK_A_PERIOD_NS; 	
     rt_task_start(&task_a_desc, &task_code, (void *)&taskAArgs);
+    rt_task_start(&task_b_desc, &task_code, (void *)&taskBArgs);
+    rt_task_start(&task_c_desc, &task_code, (void *)&taskCArgs);
     
-	/* wait for termination signal */	
+	/* wait for termination signal  */	
 	wait_for_ctrl_c();
 
 	return 0;
@@ -133,7 +178,7 @@ void task_code(void *args) {
 			printf("task %s overrun!!!\n", curtaskinfo.name);
 			break;
 		}
-		printf("Task %s activation at time %llu\n", curtaskinfo.name,ta);
+		printf("Task %s activation at time %.9f\n", curtaskinfo.name, (float)ta/1000000000);
 
 		ta_prev = ta;
 		if(update_flag){
@@ -218,3 +263,9 @@ void Heavy_Work(void)
 }
 
 
+// periodicidade deve ser diferente?
+//se parece que assim esta a correr no cpu 0
+//se esta a alternar bem
+// se prioridade significa que corre mais vez, esmiuçar este assunto
+
+//como devemos implementar a message queue
