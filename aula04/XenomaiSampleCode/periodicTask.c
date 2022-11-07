@@ -34,13 +34,14 @@
 #define TASK_MODE 0  	// No flags
 #define TASK_STKSZ 0 	// Default stack size
 
-#define TASK_A_PRIO 25 	// RT priority [0..99]
-#define TASK_A_PERIOD_NS MS_2_NS(1000)
-#define TASK_B_PERIOD_NS MS_2_NS(847)
+#define TASK_A_PRIO 12 	// RT priority [0..99]
+#define TASK_A_PERIOD_NS MS_2_NS(113)
+#define TASK_B_PERIOD_NS MS_2_NS(97)
+#define TASK_C_PERIOD_NS MS_2_NS(121)
 
-#define TASK_B_PRIO 60 	// RT priority [0..99]
+#define TASK_B_PRIO 25 	// RT priority [0..99]
 
-#define TASK_C_PRIO 12 	// RT priority [0..99]
+#define TASK_C_PRIO 60 	// RT priority [0..99]
 
 RT_TASK task_a_desc; // Task decriptor
 RT_TASK task_b_desc; // Task decriptor
@@ -73,8 +74,9 @@ int main(int argc, char *argv[]) {
 	err3=rt_task_create(&task_c_desc, "Task c", TASK_STKSZ, TASK_C_PRIO, TASK_MODE);
 
 
-	cpu_set_t c_cpu;
-	CPU_SET(0, &c_cpu);
+	cpu_set_t c_cpu;	//aloca memoria
+	CPU_ZERO(&c_cpu); 	//mete true zero em c_cpu
+	CPU_SET(0, &c_cpu);	//associa o cpu zero a c_cpu
 	err4 = rt_task_set_affinity(&task_a_desc, &c_cpu);
 	err5 = rt_task_set_affinity(&task_b_desc, &c_cpu);
 	err6 = rt_task_set_affinity(&task_c_desc, &c_cpu);
@@ -114,7 +116,7 @@ int main(int argc, char *argv[]) {
 	/* Args: task decriptor, address of function/implementation and argument*/
 	taskAArgs.taskPeriod_ns = TASK_A_PERIOD_NS;
 	taskBArgs.taskPeriod_ns = TASK_B_PERIOD_NS;
-	taskCArgs.taskPeriod_ns = TASK_A_PERIOD_NS; 	
+	taskCArgs.taskPeriod_ns = TASK_C_PERIOD_NS; 	
     rt_task_start(&task_a_desc, &task_code, (void *)&taskAArgs);
     rt_task_start(&task_b_desc, &task_code, (void *)&taskBArgs);
     rt_task_start(&task_c_desc, &task_code, (void *)&taskCArgs);
@@ -144,7 +146,7 @@ void task_code(void *args) {
 	taskArgs=(struct taskArgsStruct *)args;
 	printf("Task %s init, period:%llu\n", curtaskinfo.name, taskArgs->taskPeriod_ns);
 	
-	int ta_prev, iat_min, iat_max;
+	RTIME ta_prev, iat_min, iat_max;
 	int first_flag = 1;
 	int update_flag = 0;
 
@@ -178,7 +180,7 @@ void task_code(void *args) {
 			printf("task %s overrun!!!\n", curtaskinfo.name);
 			break;
 		}
-		printf("Task %s activation at time %.9f\n", curtaskinfo.name, (float)ta/1000000000);
+		//printf("Task %s activation at time %.9f\n", curtaskinfo.name, (float)ta/1000000000);
 
 		ta_prev = ta;
 		if(update_flag){
@@ -255,7 +257,7 @@ void Heavy_Work(void)
 		tf=rt_timer_read();
 		tf-=ts;  // Compute time difference form start to finish
  	
-		printf("Integration value is: %.3f. It took %9llu ns to compute.\n", integration, tf);
+		printf("Integration value is: %.3f. It took %9llu ns or %.3f ms to compute.\n", integration, tf, (float)tf/1000000);
 		
 		first = 1;
 	}
@@ -263,8 +265,6 @@ void Heavy_Work(void)
 }
 
 
-// periodicidade deve ser diferente?
-//se parece que assim esta a correr no cpu 0
 //se esta a alternar bem
 // se prioridade significa que corre mais vez, esmiuçar este assunto
 
