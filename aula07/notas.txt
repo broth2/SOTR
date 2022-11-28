@@ -1,0 +1,8 @@
+-servidores sao fixes porque dao prioridade a tarefas esporadicas mas nao o suficiente para elas monopolizarem o processador e bloquearem as tarefas de menor prioridade
+-servidor é exatamente como uma tarefa mas nao tem codigo, qual é o sentido? é haver tarefas apriodicas associadas ao servidor, eles sao escalonados com prioridades e quando tao prioridade maxima executam o codigo associado. Ajuda a controlar a qualidade de serviço
+-os deferrable server tem certa capacidade por periodo em que podem executar, se ele é dado tempo para executar mas nao tem tarefa, ele pode passar a vez a outra tarefa ate receber uma tarefa(onde volta a assumir o controlo) e depois executa essa propria tarefa dele, desde que a tarefa nao ultrapasse a capacidade por periodo
+-os deferrable servers podem fazer back to back executions que usam a totalidade da capacidade, ou seja uma execucao de tarefa durante x tempo no final do periodo e durante x tempo no inicio do periodo(pode fazer com que o sistema deixe de ser escalonavel) 
+-os polling server ativam e se nao tiverem a tarefa pronta para executar, so executam quando forem escalonados no proximo periodo, fazendo com que o worst case scenenario seja muito grande, quase dois vezes o periodo
+-sporadic server é a mistura de deferrable server e polling server
+-total bandwidth server é de prioridades dinamicas
+-Constant Bandwidth Server, garante tudo de bom, melhora sobre o TBS, mas é bue complicado, neste caso budget é a capacidade

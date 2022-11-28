@@ -1,0 +1,20 @@
+-com mutexs, a tarefa que faz o take, tem de fazer o give, nos semaforos nao é assim
+-indirect blocking: é quando uma tarefa de prioridade menor faz com que uma de prioridade maior fique à espera, porque a da maior prioridade em vez de estar ready, está blocked porque ta a tentar acedar a shared mem, a de menor prioridade ficou ready mais recentemente
+-dizer ao stor que no primeiro grafico dos slides, a caixa da tarefa 2 deve ser vermelha e nao preta
+-o teto do sistema corresponde ao valor maximo das prioridades entre os semaforos tomados
+-so se pode tomar um semaforo se ele estiver livre e se a prioridade do semaforo for maior que o teto do sistema
+-The SRP protocol only allows that a task starts executing when all resources that it needs are free
+-estes protocolos permitem haver acesso exclusivo à shared memory
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+-zephyr é um RTOS para ser seguro e reliable
+-freertos nao tem camada de abstracao de hardware, com zephyr o codigo é generico e funciona em qualquer hardware
+
+
+
+1-4: 8€
+5-14: 7.5€
+15-24: 7€
+25+: 6.5€
+

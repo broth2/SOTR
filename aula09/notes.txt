@@ -1,0 +1,7 @@
+-ja nao ha necessidade de programar em assembly
+-nos ja somos capazes de desenvolver melhor codigo que o compilador
+-expansao de ciclos, em vez de fazer um ciclo for normal durante 20 vezes, fazes 10 vezes mas em cada ciclo fazes o dobro das contas, mas o codigo dentro do ciclo tem de ser muito curto em relacao ao calculo do i++
+-nao usar casas decimais, simplesmente multiplicar por multiplos de 10, assim poupa se bue tempo de processamento do processador
+-temos de ver onde a aplicacao gasta mais cp e otimizar essas partes, pois com o mesmo esforço podemos ver grandes melhoramentos se melhoramos esta parte  e nao outras que demoram menos tempo, ver lei de amdahl
+-gprof diz o tempo que cada funcao usou
+-gcov diz o numero de vezes que cada linha executou (complementa o gprof)

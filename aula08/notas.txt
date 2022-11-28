@@ -1,0 +1,9 @@
+-se nao houver preensao é possivel ter uma utilizacao de cpu bue perto de zero % mas mesmo assim nao cumprir deadlines
+-sem preensao ha menos utilizacao de memoria: apenas uma stack, nao ha semaforos nem mutex, o sistema é mais simples. No entao ha desvantagens como bloqueio do cpu
+-se o finish time for maior que o periodo, nao é escalonavel, vê os desenhos do paint, o f=10 ou f=13 e o periodo é 8, ou seja, nao ha solucao e nao é escalonavel
+-avaliar o custo computacional do tick do sistema:
+-avaliar o custo computacional de mudanças de contexto: isolar uma tarefa(sem prensao) e executar. Criar outra tarefa mais rapida que so entra e sai, depois compara se os tempos ou o crl
+-tempos de execucao mudam muito sensivelmente nas diferentes instancias iniciadas
+-para avaliar o wcrt temos de pensar nos casos diferentes possiveis do algoritmo, basicamente pensar nos ramos que o codigo pode seguir(dependendo dos dados, ifs, else, while, for, switch) e para cada ramo ou scenario, ver o response time		
+-as interrupt service routines geralmente tem prioridade maxima no sistema, 
+-release jitters, sao ligeiros atrasos nos releases que fazem o tempo desviar um pouco e o pior caso aumentar

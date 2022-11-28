@@ -1,0 +1,37 @@
+-mudar programas para um cpu multicore nao aumenta necessariamente a velocidade
+-o programador tem de partir o codigo em secçoes especificas e mapea-las para os cores
+- é preciso estruturar e otimizar o software para termos os beneficios dum multicore processor
+-sistemas com multi core:
+    -processadores identicos: speeds iguais, cores iguais, wcet iguais
+    -processadores uniformes:iguais entre si mas tem speeds diferentes, que influencia o wcet
+    -processadores heterogeneos: diferentes entre si, nao ha relacoes entre os wcet duma tarefa em cpus diferentes
+- direct acyclic Graphs (dag) mostram execucao de codigo, ha forks e joins mas nao ha ciclos(setas que apontam para traz), setas vao sempre para baixo
+    -fork join model: tipo de DAG, ha nesting (um fork dentro dum fork)
+-and/or graphs: quando ha um OR significa um fork, um AND significa uma computacao em paralelo
+-cada tarefa é divida numa segmento de codigo e cada um tem um WCET, e a tarefa tem a soma de todos os WCET, deadline e periodo
+-devemos ver se a tarefa é escalonavel num processador singlecore(soma dos WCET nao ultrapassa deadline)
+-as vezes as tarefas sao escalonaveis em processadores com 2 cores, nao necessariamente precisa de 3 ou 4 ou 5
+-tempo sequencial de execucao: soma de todos WCET, se for maior que a deadline entao nao é escalonavel
+-cpu utilization da task: tempo sequencial de execucao a dividir pelo periodo, se isto for maior que o numero de cpu disponiveis entao nao é escalonavel
+-caminho critico: caminho maior possivel no grafico, o caminho que demora mais tempo. A tarefa vai demorar no minimo esse tempo, se o tempo for maior que a deadline, entao nao é escalonavel
+-Partitioned scheduling Tasks are allocated a priori to a given core -individual queues, independent ready queue,  tasks cannot migrate
+    -depois de dividirmos as tarefas pelos cpus, tratamos do escalonamento como se fosse apenas um cpu, para cada cpu independentemente
+    -um cpu pode ficar idle e outro cpu com muitas tarefas na fila(nao acontece em global scheduling)
+-Global scheduling Tasks are allocated to cores at runtime - single queue
+    queue de tarefas global, ordem da queue é por prioridades, assim que um processador fica disponivel atribui logo uma task para executar
+    -tarefas podem mudar de cpu
+    -na migracao o estado tem de ser todo copiado para outro cpu e tem grande overhead
+    -a migracao acontece por muitas razoes, como por exemplo aparecer uma tarefa com maior prioridade, faz com que a tarefa atual salte de volta para a queue
+-o efeito de dhall prova que nao é um sistema escalonavel se houver tarefas de utilizacao muito pequena, ver slides 10, pag 32/33
+-é possivel misturar Partitioned e Global: hybrid approach
+    -é vantajoso meter certas tarefas sempre no mesmo cpu porque podem partilhar memoria entre elas, quando multiplas tasks trabalham para o mesmo fim, otimiza a cache
+-bin packing problem: distribuir bolas de tamanho diferente por o numero menor de caixas possivel, é np-hard(nao ha um algoritmo que consiga obter sempre uma resposta correta)
+-Mlb, Mup: number of bins used: lower and upper bound
+-agoritmos:
+    -first fit: meter as tarefas nos cpus por ordem, a partir do primeiro, ate exceder a utilizacao, quando excede, mete no proximo cpu(Place each item in the first bin that can contain it.)
+    -best fit:  meter as tarefas nos cpus de forma a chegar a 100% de utilizacao (Place each item in the bin with the smallest empty space).
+    -worst fit: meter as tarefas nos cpus que tem menos utilizacao, se nao couber, adiciona se um cpu (Places each item in the used bin with the largest empty space, otherwise start a new bin.)
+    -next fit:  meter as tarefas nos cpus por ordem de tarefas, se nao couber no mesmo cpu, mete se no proximo (Place each item in the same bin as the last item. If it does not fit, start a new bin.).
+    -qualquer algoritmo pode ser bom, no entanto, o pior é o next fit. O best fit tenta encher ao maximo a utilizacao, o worst fit divide a carga pelos cpus
+    -ha algoritmos de ordenacao das tarefas que sao combinados com os algoritmos anteriores, como por exemplo: first fit decreasing(ordena as tarefas por ordem de tempo de execucao)
+    
