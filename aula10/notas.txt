@@ -35,3 +35,21 @@
     -qualquer algoritmo pode ser bom, no entanto, o pior é o next fit. O best fit tenta encher ao maximo a utilizacao, o worst fit divide a carga pelos cpus
     -ha algoritmos de ordenacao das tarefas que sao combinados com os algoritmos anteriores, como por exemplo: first fit decreasing(ordena as tarefas por ordem de tempo de execucao)
     
+    
+    #include <numeric>
+#include <vector>
+    
+        // inits
+    // meter aqui uma condicao que faz com que prevNumbs nao passe de 10 valores
+    vector<int> prevNumbs;
+    int curr_sum = 0;
+    int pos = 0;
+    int windowSize = 10;
+    int residualCount = 0;
+
+    curr_sum = accumulate(prevNumbs.begin(), prevNumbs.end(), 0);
+    int mov_avg = (int) curr_sum/windowSize; 
+
+
+
+
